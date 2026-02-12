@@ -229,6 +229,7 @@ Add the following lines at the top of the file:
 -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
 COMMIT
 ```
+<img width="900" height="450" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image6.png" />
 
 Replace eth0 with your actual network interface (e.g., enp0s3).
 

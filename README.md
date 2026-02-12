@@ -98,4 +98,130 @@ Note: These fields do not control where your VPN traffic appears to come from. O
 ./easyrsa gen-req server nopass
 ```
 
+This creates:
+
+server.key (private key)
+server.req (certificate request) 
+
+#### 4.2 Sign the Server Certificate with the CA
+```bash
+./easyrsa sign-req server server
+```
+
+When prompted, type:
+yes
+
+This generates:
+pki/issued/server.crt (signed server certificate)
+
+#### 4.3 Generate Diffie-Hellman Parameters
+```bash
+./easyrsa gen-dh
+```
+This creates:
+pki/dh.pem
+
+#### 4.4 Generate HMAC TLS Key
+```bash
+openvpn --genkey --secret ta.key
+```
+This creates:
+ta.key (used for TLS authentication and protection against DoS attacks)
+
+---
+
+### Step 5 — Configure the OpenVPN Server
+
+#### 5.1 Copy Required Certificate and Key Files
+
+```bash
+sudo mkdir -p /etc/openvpn/server
+sudo cp pki/ca.crt \
+pki/private/server.key \
+pki/issued/server.crt \
+pki/dh.pem \
+ta.key \
+/etc/openvpn/server/
+```
+
+#### 5.2 Create the OpenVPN Server Configuration File
+```bash
+sudo nano /etc/openvpn/server/server.conf
+```
+Add the following configuration:
+
+```conf
+port 1194
+proto udp
+dev tun
+
+ca ca.crt
+cert server.crt
+key server.key
+dh dh.pem
+
+tls-auth ta.key 0
+
+server 10.8.0.0 255.255.255.0
+
+cipher AES-256-CBC
+auth SHA256
+
+user nobody
+group nogroup
+
+persist-key
+persist-tun
+
+status openvpn-status.log
+log-append /var/log/openvpn.log
+verb 3
+```
+
+#### 5.3 Enable IP Forwarding
+
+Edit sysctl configuration:
+```bash
+sudo nano /etc/sysctl.conf
+```
+
+Uncomment:
+```ini
+net.ipv4.ip_forward=1
+```
+
+Apply changes:
+```bash
+sudo sysctl -p
+```
+
+#### 5.4 Configure UFW Firewall Rules
+
+Allow OpenVPN and SSH:
+```bash
+sudo ufw allow 1194/udp
+sudo ufw allow OpenSSH
+```
+
+Edit UFW rules:
+```bash
+sudo nano /etc/ufw/before.rules
+```
+
+Add the following lines at the top of the file:
+```conf
+*nat
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+COMMIT
+```
+
+Replace eth0 with your actual network interface (e.g., enp0s3).
+
+Enable UFW:
+```bash
+sudo ufw enable
+```
+
+
 

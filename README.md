@@ -1,4 +1,4 @@
-<img width="9000" height="500" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/PKI-based%20OpenVPN%20infrastructure%20design.png" />
+<img width="1000" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/pic.png" />
 
 
 # PKI-BasedOpenVPN

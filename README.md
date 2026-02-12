@@ -364,3 +364,112 @@ This will generate:
 ~/client-configs/files/client1.ovpn
 ```
 
+---
+
+### Step 8 — Configure the Client
+
+#### 8.1 Transfer the `.ovpn` File to the Client Device
+
+Use a secure transfer method such as:
+
+- SCP
+- SFTP
+- USB transfer
+- Encrypted cloud storage
+
+Example using SCP:
+
+```bash
+scp ~/client-configs/files/client1.ovpn user@CLIENT_IP:/home/user/
+```
+
+#### 8.2 Install OpenVPN on the Client
+🐧 Linux
+Install OpenVPN:
+```bash
+sudo apt install -y openvpn
+```
+
+Connect using:
+```bash
+sudo openvpn --config client1.ovpn
+```
+
+🪟 Windows
+
+1. Download OpenVPN GUI from:
+https://openvpn.net/community-downloads/
+
+2. Install the application.
+
+3. Place client1.ovpn in:
+```arduino
+C:\Program Files\OpenVPN\config\
+```
+
+4. Run OpenVPN GUI as Administrator.
+
+5, Right-click the tray icon → Connect.
+
+🍎 macOS
+
+1. Download Tunnelblick:
+https://tunnelblick.net/
+
+2. Install the application.
+
+3. Double-click client1.ovpn to import.
+
+4. Click Connect.
+   
+--- 
+
+### Step 9 — Test the VPN Connection
+#### 9.1 Connect to the VPN
+
+Start the OpenVPN client using client1.ovpn.
+
+If successful, you should see:
+```mathematica
+Initialization Sequence Completed
+```
+
+#### 9.2 Verify Your Public IP Address
+
+Check if your public IP matches the VPN server’s IP.
+
+Linux / macOS
+```bash
+curl ifconfig.me
+```
+
+Windows
+
+Open Command Prompt:
+```bash
+curl ifconfig.me
+```
+If the IP matches your Ubuntu server, traffic is routed through the VPN.
+
+#### 9.3 Verify Tunnel Interface
+
+On Linux/macOS:
+```bash
+ip a
+```
+
+You should see a tun0 interface with an IP like:
+```bash
+10.8.0.x
+```
+
+#### 9.4 Test Network Access
+
+Ping the VPN server:
+```bash
+ping 10.8.0.1
+```
+
+You should receive replies, confirming the encrypted tunnel is active.
+
+

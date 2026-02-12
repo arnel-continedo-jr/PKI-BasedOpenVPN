@@ -189,7 +189,7 @@ status openvpn-status.log
 log-append /var/log/openvpn.log
 verb 3
 ```
-<img width="900" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image4.png" />
+<img width="900" height="450" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image4.png" />
 
 #### 5.3 Enable IP Forwarding
 
@@ -202,6 +202,7 @@ Uncomment:
 ```ini
 net.ipv4.ip_forward=1
 ```
+<img width="900" height="450" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image5.png" />
 
 Apply changes:
 ```bash

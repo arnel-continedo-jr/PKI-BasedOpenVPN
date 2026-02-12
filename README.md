@@ -49,15 +49,22 @@ The lab simulates a real-world VPN deployment, including secure key management, 
 
 ## 🔧 Step-by-Step Guide
 
+---
+
 ### Step 1 — Update the system
 ```bash
 sudo apt update
 sudo apt upgrade -y
 ```
+
+---
+
 ### Step 2 — Install OpenVPN + Easy-RSA
 ```bash
 sudo apt install -y openvpn easy-rsa
 ```
+---
+
 ### Step 3 — Set up the Certificate Authority (Easy-RSA)
 
 #### 3.1 Create the Easy-RSA working directory
@@ -89,6 +96,8 @@ Note: These fields do not control where your VPN traffic appears to come from. O
 •/easyrsa init-pki
 •/easyrsa build-ca
 ```
+
+---
 
 ### Step 4 — Generate Server Certificate and Key
 
@@ -222,6 +231,136 @@ Enable UFW:
 ```bash
 sudo ufw enable
 ```
+---
 
+### Step 6 — Start and Enable the OpenVPN Server
 
+Start the OpenVPN service:
+
+```bash
+sudo systemctl start openvpn-server@server
+```
+Enable the service to start automatically on boot:
+```bash
+sudo systemctl enable openvpn-server@server
+```
+
+Verify that the service is running:
+```bash
+sudo systemctl status openvpn-server@server
+```
+
+If successful, the service should show as:
+active (running)
+
+---
+
+### Step 7 — Generate Client Certificates and Configuration
+
+#### 7.1 Generate Client Certificate and Key
+```bash
+cd ~/openvpn-ca
+./easyrsa gen-req client1 nopass
+./easyrsa sign-req client client1
+```
+
+Confirm with yes when prompted.
+
+This generates:
+
+client1.key
+client1.crt
+
+#### 7.2 Create the Client Configuration Directory
+```bash
+mkdir -p ~/client-configs/keys
+```
+
+Copy required files:
+```bash
+cp pki/ca.crt \
+pki/issued/client1.crt \
+pki/private/client1.key \
+~/client-configs/keys/
+
+cp ta.key ~/client-configs/keys/
+```
+
+#### 7.3 Create the Base Client Configuration File
+```bash
+nano ~/client-configs/base.conf
+```
+
+Add:
+```conf
+client
+dev tun
+proto udp
+remote YOUR_SERVER_IP 1194
+
+resolv-retry infinite
+nobind
+
+persist-key
+persist-tun
+
+remote-cert-tls server
+
+cipher AES-256-CBC
+auth SHA256
+
+key-direction 1
+verb 3
+```
+
+Replace YOUR_SERVER_IP with your actual server IP address.
+
+#### 7.4 Create Script to Package Client Configuration
+
+Create directory:
+```bash
+mkdir -p ~/client-configs/files
+```
+
+Create script:
+```bash
+nano ~/client-configs/make_config.sh
+```
+
+Add:
+```bash
+#!/bin/bash
+
+KEY_DIR=~/client-configs/keys
+OUTPUT_DIR=~/client-configs/files
+BASE_CONFIG=~/client-configs/base.conf
+
+cat ${BASE_CONFIG} \
+    <(echo -e '<ca>') \
+    ${KEY_DIR}/ca.crt \
+    <(echo -e '</ca>\n<cert>') \
+    ${KEY_DIR}/${1}.crt \
+    <(echo -e '</cert>\n<key>') \
+    ${KEY_DIR}/${1}.key \
+    <(echo -e '</key>\n<tls-auth>') \
+    ${KEY_DIR}/ta.key \
+    <(echo -e '</tls-auth>') \
+    > ${OUTPUT_DIR}/${1}.ovpn
+```
+
+Make it executable:
+```bash
+chmod +x ~/client-configs/make_config.sh
+```
+
+Generate client configuration file:
+```bash
+cd ~/client-configs
+./make_config.sh client1
+```
+
+This will generate:
+```bash
+~/client-configs/files/client1.ovpn
+```
 

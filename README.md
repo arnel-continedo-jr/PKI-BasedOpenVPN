@@ -71,7 +71,7 @@ sudo apt install -y openvpn easy-rsa
 make-cadir ~/openvpn-ca
 cd ~/openvpn-ca
 ```
-<img width="900" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image.png" />
+<img width="900" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image1.png" />
 
 #### 3.2 Edit the vars file (certificate identity fields)
 ```bash

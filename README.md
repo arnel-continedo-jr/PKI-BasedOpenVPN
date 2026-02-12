@@ -56,7 +56,6 @@ The lab simulates a real-world VPN deployment, including secure key management, 
 sudo apt update
 sudo apt upgrade -y
 ```
-
 ---
 
 ### Step 2 — Install OpenVPN + Easy-RSA
@@ -72,6 +71,7 @@ sudo apt install -y openvpn easy-rsa
 make-cadir ~/openvpn-ca
 cd ~/openvpn-ca
 ```
+<img width="900" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image.png" />
 
 #### 3.2 Edit the vars file (certificate identity fields)
 ```bash
@@ -88,6 +88,7 @@ set_var EASYRSA_REQ_ORG        "MyOrg"
 set_var EASYRSA_REQ_EMAIL      "email@example.com"
 set_var EASYRSA_REQ_OU         "MyOrgUnit"
 ```
+<img width="900" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image2.png" />
 
 Note: These fields do not control where your VPN traffic appears to come from. Only the VPN server’s actual IP/location affects that.
 
@@ -132,8 +133,10 @@ pki/dh.pem
 
 #### 4.4 Generate HMAC TLS Key
 ```bash
-openvpn --genkey --secret ta.key
+openvpn --genkey secret ta.key
 ```
+<img width="900" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image3.png" />
+
 This creates:
 ta.key (used for TLS authentication and protection against DoS attacks)
 
@@ -186,6 +189,7 @@ status openvpn-status.log
 log-append /var/log/openvpn.log
 verb 3
 ```
+<img width="900" height="400" src="https://github.com/arnel-continedo-jr/PKI-BasedOpenVPN/blob/main/images/image4.png" />
 
 #### 5.3 Enable IP Forwarding
 

@@ -472,4 +472,41 @@ ping 10.8.0.1
 
 You should receive replies, confirming the encrypted tunnel is active.
 
+---
+
+## 🛡️ Use Cases
+
+- Secure remote access to a home or lab network
+- Encrypting traffic over public Wi-Fi
+- Creating a private tunnel between multiple devices
+- Learning and implementing PKI-based authentication
+- Simulating enterprise-style VPN infrastructure
+- Secure access to internal services from external networks
+
+---
+
+## 🔗 Resources
+
+- OpenVPN Documentation: https://openvpn.net/community-resources/
+- Easy-RSA Documentation: https://github.com/OpenVPN/easy-rsa
+- Ubuntu Server Guide: https://ubuntu.com/server/docs
+- Tunnelblick (macOS): https://tunnelblick.net/
+- OpenVPN Community Downloads: https://openvpn.net/community-downloads/
+
+---
+
+## ✅ Conclusion
+
+This project demonstrates a complete deployment of a PKI-based OpenVPN infrastructure using Ubuntu. It covers certificate authority creation, server configuration, NAT routing, firewall integration, encrypted tunneling, and multi-platform client connectivity.
+
+The implementation reflects real-world VPN architecture principles, including TLS encryption, certificate-based authentication, segmented tunnel networks, and secure remote access practices.
+
+This lab environment serves as a strong foundation for understanding enterprise VPN deployments and secure network design.
+
+---
+
+**Author**: Arnel Continedo Jr  
+**Version**: 1.0  
+**Last Updated**: Feb 2026  
+
 
